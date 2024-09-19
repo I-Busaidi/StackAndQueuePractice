@@ -123,14 +123,57 @@ namespace StackAndQueue
         static void SortStack()
         {
             int UserInput;
+            int NoOfPops;
+            bool FoundGreater = true;
+            StringBuilder sb = new StringBuilder();
             Stack<int> MainStack = new Stack<int>();
             Stack<int> SecondaryStack = new Stack<int>();
-            Console.WriteLine("\nEnter the numbers:");
+            Console.WriteLine("\nEnter the numbers one by one:");
             while(int.TryParse(Console.ReadLine(),out UserInput))
             {
-                MainStack.Push(UserInput);
-                Console.WriteLine("Enter the next number, or \"s\" to start sorting.");
+                Console.WriteLine("\nEnter the next number, or \"s\" to show sorted stack:");
+                sb.Append(UserInput).Append(" ");
+                NoOfPops = 0;
+                if (MainStack.Count == 0)
+                {
+                    MainStack.Push(UserInput);
+                }
+                else
+                {
+                    foreach (int i in MainStack)
+                    {
+                        if (UserInput > i)
+                        {
+                            NoOfPops++;
+                            FoundGreater = false;
+                        }
+                    }
+                    if (FoundGreater)
+                    {
+                        MainStack.Push(UserInput);
+                    }
+                    else
+                    {
+                        for (int i = 0; i < NoOfPops; i++)
+                        {
+                            SecondaryStack.Push(MainStack.Pop());
+                        }
+                        MainStack.Push(UserInput);
+                        for (int i = 0;i < NoOfPops;i++)
+                        {
+                            MainStack.Push(SecondaryStack.Pop());
+                        }
+                    }
+                }
             }
+            Console.Clear();
+            Console.WriteLine("Entered numbers: "+sb.ToString());
+            sb.Clear();
+            foreach(int num in MainStack)
+            {
+                sb.Append(num).Append(" ");
+            }
+            Console.WriteLine("Sorted numbers: "+sb.ToString());
         }
         static void QueueReverse()
         {
@@ -256,7 +299,7 @@ namespace StackAndQueue
                 "\n2. Reverse a string." +
                 "\n3. Check parenthesis balance." +
                 "\n4. Find maximum element." +
-                "\n5. Sort a stack. (Under Maintenance)" +
+                "\n5. Sort a stack" +
                 "\n6. Reverse a queue." +
                 "\n7. Check if queue is a palindrome." +
                 "\n8. Maximum element in a sliding window." +
@@ -295,8 +338,7 @@ namespace StackAndQueue
                         break;
 
                     case 5:
-                        Console.WriteLine("Function is Under Maintenance, Please Try Again Later.");
-                        //SortStack();
+                        SortStack();
                         break;
 
                     case 6:
